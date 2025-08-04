@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do List App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="todo-container">
+    <h1>My To-Do List 📝</h1>
+
+    <form id="todo-form">
+      <input type="text" id="task-input" placeholder="Task Title" required />
+      <input type="date" id="date-input" required />
+      <input type="time" id="time-input" required />
+      <button type="submit">Add Task</button>
+    </form>
+
+    <ul id="task-list"></ul>
+  </div>
+
+  <script>
+    const form = document.getElementById('todo-form');
+    const taskInput = document.getElementById('task-input');
+    const dateInput = document.getElementById('date-input');
+    const timeInput = document.getElementById('time-input');
+    const taskList = document.getElementById('task-list');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      addTask(taskInput.value, dateInput.value, timeInput.value);
+      form.reset();
+    });
+
+    function addTask(title, date, time) {
+      const li = document.createElement('li');
+
+      const taskText = document.createElement('span');
+      taskText.textContent = `${title} (DueDate: ${date} ${time})`;
+      taskText.className = 'task-text';
+
+      const completeBtn = document.createElement('button');
+      completeBtn.textContent = '✔';
+      completeBtn.title = 'Mark Complete';
+      completeBtn.className = 'complete-btn';
+
+      const editBtn = document.createElement('button');
+      editBtn.textContent = '✎';
+      editBtn.title = 'Edit Task';
+      editBtn.className = 'edit-btn';
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '🗑';
+      deleteBtn.title = 'Delete Task';
+      deleteBtn.className = 'delete-btn';
+
+      li.appendChild(taskText);
+      li.appendChild(completeBtn);
+      li.appendChild(editBtn);
+      li.appendChild(deleteBtn);
+      taskList.appendChild(li);
+
+      completeBtn.addEventListener('click', () => {
+        taskText.classList.toggle('completed');
+      });
+
+      editBtn.addEventListener('click', () => {
+        const newTitle = prompt("Edit Task Title:", title);
+        const newDate = prompt("Edit Date (YYYY-MM-DD):", date);
+        const newTime = prompt("Edit Time (HH:MM):", time);
+        if (newTitle && newDate && newTime) {
+          taskText.textContent = `${newTitle} (DueDate: ${newDate} ${newTime})`;
+        }
+      });
+
+      deleteBtn.addEventListener('click', () => {
+        taskList.removeChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
